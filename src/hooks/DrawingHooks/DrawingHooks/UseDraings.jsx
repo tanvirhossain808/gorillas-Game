@@ -1,4 +1,4 @@
-import { drawGorillaBody, drawGorillaLeftArm, drawGorillaRightArm } from "../../../utiliteis/drawingGorillas";
+import { drawGorillaBody, drawGorillaFace, drawGorillaLeftArm, drawGorillaRightArm } from "../../../utiliteis/drawingGorillas";
 
 export const useDrawings = (ctx) => {
     const drawBackground = (ctx) => {
@@ -21,7 +21,7 @@ export const useDrawings = (ctx) => {
         drawGorillaBody(ctx);
         drawGorillaLeftArm(player, phase, ctx);
         drawGorillaRightArm(player, phase, ctx);
-        // drawGorillaFace();
+        drawGorillaFace(player, phase, ctx);
 
         ctx.restore();
     };

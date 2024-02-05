@@ -60,6 +60,23 @@ export function drawGorillaRightArm(player, phase, ctx) {
     ctx.stroke();
 }
 
-export function drawGorillaFace() {
-    // ...
+export function drawGorillaFace(player, phase, ctx) {
+    ctx.strokeStyle = "lightgray";
+    ctx.lineWidth = 3;
+
+    ctx.beginPath();
+
+    // Left Eye
+    ctx.moveTo(-5, 70);
+    ctx.lineTo(-2, 70);
+
+    // Right Eye
+    ctx.moveTo(2, 70);
+    ctx.lineTo(5, 70);
+
+    // Mouth
+    ctx.moveTo(-5, 62);
+    ctx.lineTo(5, 62);
+
+    ctx.stroke();
 }

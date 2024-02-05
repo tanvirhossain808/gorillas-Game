@@ -18,10 +18,10 @@ const Canva = ({ draw, setCtx, newGame, }) => {
 
             // console.log(ctx, "g");
             setCtx(ctx);
-
-            draw(ctx);
-
             newGame(ctx);
+            // draw(ctx);
+
+
             // ctx.fillStyle = "#58A8D8";
             // ctx.fillRect(200, 200, 440, 320);
             // ctx.beginPath();

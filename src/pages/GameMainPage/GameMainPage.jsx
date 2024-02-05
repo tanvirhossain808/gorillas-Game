@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState, usephase } from "react";
 import Canva from "../../components/Canva/Canva";
 import { useDrawings } from "../../hooks/DrawingHooks/DrawingHooks/UseDraings";
 
@@ -17,15 +17,44 @@ const GameMainPage = () => {
     // console.log(phase)
     const [ctx, setCtx] = useState();
     // console.log('dff', ctx)
-    const initializeBombPosition = () => {
+    function initializeBombPosition() {
+        const building =
+            phase.currentPlayer === 1
+                ? phase.buildings.at(1) // Second building
+                : phase.buildings.at(-2); // Second last building
 
-    };
+        const gorillaX = building.x + building.width / 2;
+        const gorillaY = building.height;
+
+        const gorillaHandOffsetX = phase.currentPlayer === 1 ? -28 : 28;
+        const gorillaHandOffsetY = 107;
+
+        phase.bomb.x = gorillaX + gorillaHandOffsetX;
+        phase.bomb.y = gorillaY + gorillaHandOffsetY;
+        phase.bomb.velocity.x = 0;
+        phase.bomb.velocity.y = 0;
+    }
 
 
+    useEffect(() => {
+        if (ctx) {
+            draw(ctx);
+            initializeBombPosition();
+        }
 
+    }, [phase])
 
     const newGame = (ctx) => {
-
+        setPhase({
+            phase: "aiming",
+            currentPlayer: 1,
+            bomb: {
+                x: undefined,
+                y: undefined,
+                velocity: { x: 0, y: 0 }
+            },
+            buildings: generateBuildings(),
+        })
         console.log(ctx)
         // setPhase(
         //     {
@@ -48,10 +77,12 @@ const GameMainPage = () => {
 
         // })
 
-        initializeBombPosition();
+        // initializeBombPosition();
+        setCtx(ctx)
         // draw(ctx);
         // console.log('ct', ctx);
     };
+
     const draw = (ctx) => {
         // ctx.save();
 
