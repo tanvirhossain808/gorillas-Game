@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import Canva from './components/Canva/Canva'
+import GameMainPage from './pages/GameMainPage/GameMainPage'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -8,7 +8,8 @@ function App() {
   return (
     <>
       <div>
-        <Canva></Canva>
+
+        <GameMainPage></GameMainPage>
       </div>
     </>
   )
