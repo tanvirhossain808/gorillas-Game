@@ -4,8 +4,9 @@ import { useDrawings } from "../../hooks/DrawingHooks/DrawingHooks/UseDraings";
 
 const GameMainPage = () => {
     const [phase, setPhase] = useState({});
-    const [ctx, setCtx] = useState('');
-    const { drawBomb, drawGorilla, drawBuildings } = useDrawings(ctx)
+    const [ctx, setCtx] = useState();
+    // console.log('dff', ctx)
+    const { drawBomb, drawGorilla, drawBuildings, drawBackground } = useDrawings();
     const initializeBombPosition = () => {
 
     };
@@ -13,11 +14,12 @@ const GameMainPage = () => {
         ctx.save();
         ctx.translate(0, window.innerHeight);
         ctx.scale(1, -1);
+        drawBackground(ctx)
         drawBuildings();
         drawGorilla(1);
         drawGorilla(2);
         drawBomb();
-        ctx.retore();
+        ctx.restore();
     }
     const newGame = () => {
         setPhase(
@@ -33,7 +35,8 @@ const GameMainPage = () => {
             }
         );
         initializeBombPosition();
-        draw();
+        draw(ctx);
+        console.log('ct', ctx);
     }
     return (
         <div>

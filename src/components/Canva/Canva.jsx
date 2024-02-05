@@ -21,12 +21,11 @@ const Canva = ({ draw, setCtx }) => {
             ctx.lineTo(200, 500);
             ctx.fill();
             // ctx.fillRect(200, 200, 440, 320);
-            draw();
             setCtx(ctx)
+            draw(ctx)
 
 
         }
-
 
 
     }, [])
