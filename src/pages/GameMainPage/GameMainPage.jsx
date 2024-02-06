@@ -1,3 +1,4 @@
+import './GameMainPage.css'
 import { useEffect, useState, usephase } from "react";
 import Canva from "../../components/Canva/Canva";
 import { useDrawings } from "../../hooks/DrawingHooks/DrawingHooks/UseDraings";
@@ -5,6 +6,8 @@ import InfoLeft from "../../components/InfoLeft/InfoLeft";
 import InfoRight from "../../components/InfoRight/InfoRight";
 
 const GameMainPage = () => {
+    const [leftPosition, setLeftPosition] = useState(0);
+    const [bottomPosition, setBottomPostion] = useState(0);
 
     const { drawBomb, drawGorilla, drawBuildings, drawBackground, generateBuildings, calculateScale } = useDrawings();
     const [phase, setPhase] = useState({
@@ -36,9 +39,15 @@ const GameMainPage = () => {
         phase.bomb.y = gorillaY + gorillaHandOffsetY;
         phase.bomb.velocity.x = 0;
         phase.bomb.velocity.y = 0;
+        const grabAreaRadius = 15;
+        const left = phase.bomb.x * phase.scale - grabAreaRadius;
+        const bottom = phase.bomb.y * phase.scale - grabAreaRadius;
+        setLeftPosition(left);
+        setBottomPostion(bottom);
+
     }
-
-
+    console.log(phase)
+    console.log(leftPosition, 'left')
     useEffect(() => {
         if (ctx) {
             calculateScale(phase);
@@ -106,6 +115,7 @@ const GameMainPage = () => {
         ctx.restore();
 
         // newGame();
+        console.log(leftPosition, 'd')
     };
 
     return (
@@ -114,9 +124,11 @@ const GameMainPage = () => {
             <div className="corner">
                 <InfoLeft></InfoLeft>
                 <InfoRight></InfoRight>
-
+                <div className="bombGrabArea" style={{ left: `${leftPosition}px`, bottom: `${bottomPosition}` }}>
+                    {console.log(leftPosition, 'up')}
+                </div>
             </div>
-        </div>
+        </div >
     );
 };
 
