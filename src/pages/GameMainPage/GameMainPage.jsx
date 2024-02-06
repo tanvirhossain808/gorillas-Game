@@ -1,9 +1,12 @@
 import { useEffect, useState, usephase } from "react";
 import Canva from "../../components/Canva/Canva";
 import { useDrawings } from "../../hooks/DrawingHooks/DrawingHooks/UseDraings";
+import InfoLeft from "../../components/InfoLeft/InfoLeft";
+import InfoRight from "../../components/InfoRight/InfoRight";
 
 const GameMainPage = () => {
-    const { drawBomb, drawGorilla, drawBuildings, drawBackground, generateBuildings } = useDrawings();
+
+    const { drawBomb, drawGorilla, drawBuildings, drawBackground, generateBuildings, calculateScale } = useDrawings();
     const [phase, setPhase] = useState({
         phase: "aiming",
         currentPlayer: 1,
@@ -38,8 +41,10 @@ const GameMainPage = () => {
 
     useEffect(() => {
         if (ctx) {
-            draw(ctx);
+            calculateScale(phase);
             initializeBombPosition();
+            draw(ctx);
+            console.log(phase, 'f')
         }
 
     }, [phase])
@@ -47,6 +52,7 @@ const GameMainPage = () => {
     const newGame = (ctx) => {
         setPhase({
             phase: "aiming",
+            scale: 1,
             currentPlayer: 1,
             bomb: {
                 x: undefined,
@@ -90,12 +96,12 @@ const GameMainPage = () => {
         // ctx.scale(-1, 1);
         // ctx.translate(0, window.innerHeight);
         // ctx.scale(1, -1);
-        drawBackground(ctx)
+        drawBackground(ctx, phase)
         drawBuildings(phase.buildings, ctx);
 
         drawGorilla(1, phase, ctx);
         drawGorilla(2, phase, ctx);
-        drawBomb();
+        drawBomb(phase, ctx);
 
         ctx.restore();
 
@@ -105,6 +111,11 @@ const GameMainPage = () => {
     return (
         <div>
             <Canva draw={draw} setCtx={setCtx} newGame={newGame}></Canva>
+            <div className="corner">
+                <InfoLeft></InfoLeft>
+                <InfoRight></InfoRight>
+
+            </div>
         </div>
     );
 };

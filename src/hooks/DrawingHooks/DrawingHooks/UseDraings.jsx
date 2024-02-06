@@ -1,9 +1,10 @@
 import { drawGorillaBody, drawGorillaFace, drawGorillaLeftArm, drawGorillaRightArm } from "../../../utiliteis/drawingGorillas";
 
 export const useDrawings = (ctx) => {
-    const drawBackground = (ctx) => {
+    const drawBackground = (ctx, phase) => {
         ctx.fillStyle = "#58A8D8";
-        ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+        ctx.fillRect(0, 0, window.innerWidth / phase.scale, window.innerHeight / phase.scale);
+
 
     };
     const drawBuildings = (buildings, ctx) => {
@@ -25,8 +26,11 @@ export const useDrawings = (ctx) => {
 
         ctx.restore();
     };
-    const drawBomb = () => {
-
+    const drawBomb = (phase, ctx) => {
+        ctx.fillStyle = "white";
+        ctx.beginPath();
+        ctx.arc(phase.bomb.x, phase.bomb.y, 6, 0, 2 * Math.PI);
+        ctx.fill();
     };
     const generateBuildings = () => {
         const bulidngs = [];
@@ -47,5 +51,11 @@ export const useDrawings = (ctx) => {
         }
         return bulidngs;
     }
-    return { drawBomb, drawGorilla, drawBuildings, drawBackground, generateBuildings }
+    const calculateScale = (phase) => {
+        const lastBuilding = phase.buildings.at(-1);
+        const totalWidthOfTheCity = lastBuilding.x + lastBuilding.width;
+
+        phase.scale = window.innerWidth / totalWidthOfTheCity;
+    }
+    return { drawBomb, drawGorilla, drawBuildings, drawBackground, generateBuildings, calculateScale }
 }
