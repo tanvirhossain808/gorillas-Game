@@ -8,6 +8,12 @@ import InfoRight from "../../components/InfoRight/InfoRight";
 const GameMainPage = () => {
     const [leftPosition, setLeftPosition] = useState(0);
     const [bottomPosition, setBottomPostion] = useState(0);
+    const [draggingPhase, setDraggingPhase] = useState({
+        isDragging: false,
+        dragStartX: undefined,
+        dragStartY: undefined
+
+    })
 
     const { drawBomb, drawGorilla, drawBuildings, drawBackground, generateBuildings, calculateScale } = useDrawings();
     const [phase, setPhase] = useState({
@@ -39,9 +45,11 @@ const GameMainPage = () => {
         phase.bomb.y = gorillaY + gorillaHandOffsetY;
         phase.bomb.velocity.x = 0;
         phase.bomb.velocity.y = 0;
-        const grabAreaRadius = 15;
-        const left = phase.bomb.x * phase.scale - grabAreaRadius;
-        const bottom = phase.bomb.y * phase.scale - grabAreaRadius;
+        const grabAreaRadius = 25;
+        // const left = phase.bomb.x * phase.scale - grabAreaRadius;
+        // const bottom = phase.bomb.y * phase.scale - grabAreaRadius;
+        const left = phase.bomb.x - grabAreaRadius;
+        const bottom = phase.bomb.y - grabAreaRadius;
         setLeftPosition(left);
         setBottomPostion(bottom);
 
@@ -97,7 +105,17 @@ const GameMainPage = () => {
         // draw(ctx);
         // console.log('ct', ctx);
     };
+    const handleMouseDown = (e) => {
+        if (phase.phase === "aiming") {
+            setDraggingPhase({
+                isDragging: true,
+                dragStartX: e.clientX,
+                dragStartY: e.clientY
+            })
+            console.log(draggingPhase.dragStartX)
 
+        }
+    }
     const draw = (ctx) => {
         // ctx.save();
 
@@ -117,18 +135,33 @@ const GameMainPage = () => {
         // newGame();
         console.log(leftPosition, 'd')
     };
+    const handleMouseMove = (e) => {
+        const { isDragging, dragStartX, dragStartY } = draggingPhase
+        if (isDragging) {
+            let deltaX = e.clientX - dragStartX;
+            let deltaY = e.clientY - dragStartY;
 
+            phase.bomb.velocity.x = -deltaX;
+            phase.bomb.velocity.y = +deltaY;
+            // setInfo(deltaX, deltaY);
+            ctx.save();
+            ctx.translate(0, window.innerHeight);
+            ctx.scale(1, -1);
+            // ctx.scale(ctx.
+            draw(ctx);
+        }
+    }
     return (
         <div>
             <Canva draw={draw} setCtx={setCtx} newGame={newGame}></Canva>
-            <div className="corner">
-                <InfoLeft></InfoLeft>
-                <InfoRight></InfoRight>
 
+            <InfoLeft></InfoLeft>
+            <InfoRight></InfoRight>
+
+
+            <div onMouseMove={handleMouseMove} onMouseDown={(e) => handleMouseDown(e)} className="bombGrabArea" style={{ left: `${leftPosition}px`, bottom: `${bottomPosition}px`, cursor: draggingPhase.isDragging ? 'grabbing' : 'grab', }}>
             </div>
-            <div className="bombGrabArea" style={{ left: `${leftPosition}px`, bottom: `${bottomPosition}px` }}>
-            </div>
-        </div>
+        </div >
     );
 };
 
