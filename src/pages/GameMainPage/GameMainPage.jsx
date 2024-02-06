@@ -6,6 +6,7 @@ import InfoLeft from "../../components/InfoLeft/InfoLeft";
 import InfoRight from "../../components/InfoRight/InfoRight";
 
 const GameMainPage = () => {
+    const [velocityAngle, setVelocityAngle] = useState({ leftVelocity: 0, leftAngle: 0, rightVelocity: 0, rightAngle: 0 })
     const [leftPosition, setLeftPosition] = useState(0);
     const [bottomPosition, setBottomPostion] = useState(0);
     const [draggingPhase, setDraggingPhase] = useState({
@@ -13,9 +14,10 @@ const GameMainPage = () => {
         dragStartX: undefined,
         dragStartY: undefined
 
-    })
+    });
+    const [previousAnimationTimestamp, setPreviousAnimationTimestamp] = useState(undefined);
 
-    const { drawBomb, drawGorilla, drawBuildings, drawBackground, generateBuildings, calculateScale } = useDrawings();
+    const { drawBomb, drawGorilla, drawBuildings, drawBackground, generateBuildings, calculateScale, setInfo, throwBomb } = useDrawings();
     const [phase, setPhase] = useState({
         phase: "aiming",
         currentPlayer: 1,
@@ -118,7 +120,8 @@ const GameMainPage = () => {
     }
     const draw = (ctx) => {
         // ctx.save();
-
+        ctx.translate(0, window.innerHeight);
+        ctx.scale(1, -1);
         // ctx.translate(0, window.innerHeight);
         // ctx.scale(-1, 1);
         // ctx.translate(0, window.innerHeight);
@@ -140,26 +143,38 @@ const GameMainPage = () => {
         if (isDragging) {
             let deltaX = e.clientX - dragStartX;
             let deltaY = e.clientY - dragStartY;
-
             phase.bomb.velocity.x = -deltaX;
             phase.bomb.velocity.y = +deltaY;
             // setInfo(deltaX, deltaY);
             ctx.save();
-            ctx.translate(0, window.innerHeight);
-            ctx.scale(1, -1);
+            // ctx.translate(0, window.innerHeight);
+            // ctx.scale(1, -1);
             // ctx.scale(ctx.
+            setInfo(deltaX, deltaY, phase, setVelocityAngle, velocityAngle);
             draw(ctx);
+            // console.assert(deltaX, 'dfd')
+        }
+    }
+    const handleMouseUp = (e) => {
+        // ctx.translate(0, window.innerHeight);
+        // ctx.scale(1, -1);
+        if (draggingPhase.isDragging) {
+            setDraggingPhase({ ...draggingPhase, isDragging: false })
+
+            document.body.style.cursor = "default";
+
+            throwBomb(phase, setPreviousAnimationTimestamp, setPhase);
         }
     }
     return (
         <div>
             <Canva draw={draw} setCtx={setCtx} newGame={newGame}></Canva>
 
-            <InfoLeft></InfoLeft>
-            <InfoRight></InfoRight>
+            <InfoLeft velocityAngle={velocityAngle}></InfoLeft>
+            <InfoRight velocityAngle={velocityAngle}></InfoRight>
 
 
-            <div onMouseMove={handleMouseMove} onMouseDown={(e) => handleMouseDown(e)} className="bombGrabArea" style={{ left: `${leftPosition}px`, bottom: `${bottomPosition}px`, cursor: draggingPhase.isDragging ? 'grabbing' : 'grab', }}>
+            <div onMouseUp={handleMouseUp} onMouseMove={handleMouseMove} onMouseDown={(e) => handleMouseDown(e)} className="bombGrabArea" style={{ left: `${leftPosition}px`, bottom: `${bottomPosition}px`, cursor: draggingPhase.isDragging ? 'grabbing' : 'grab', }}>
             </div>
         </div >
     );

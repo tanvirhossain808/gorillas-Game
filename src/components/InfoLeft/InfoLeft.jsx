@@ -1,10 +1,10 @@
 import './InfoLeft.css'
-const InfoLeft = () => {
+const InfoLeft = ({ velocityAngle: { leftAngle, leftVelocity } }) => {
     return (
         <div className="infoLeft">
             <h3> Player 1</h3>
-            <p>Angle:<span className="angle">0</span>°</p>
-            <p>Velocity:<span className="velocity">0</span></p>
+            <p>Angle:<span className="angle">{leftAngle}</span>°</p>
+            <p>Velocity:<span className="velocity">{leftVelocity}</span></p>
         </div>
     );
 };

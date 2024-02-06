@@ -13,8 +13,8 @@ const Canva = ({ draw, setCtx, newGame, }) => {
             // 
             const ctx = canvas.getContext("2d");
             ctx.save();
-            ctx.translate(0, window.innerHeight);
-            ctx.scale(1, -1);
+            // ctx.translate(0, window.innerHeight);
+            // ctx.scale(1, -1);
             // ctx.scale(ctx.scale, ctx.scale);
 
             // console.log(ctx, "g");
