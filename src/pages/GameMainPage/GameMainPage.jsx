@@ -124,11 +124,11 @@ const GameMainPage = () => {
             <div className="corner">
                 <InfoLeft></InfoLeft>
                 <InfoRight></InfoRight>
-                <div className="bombGrabArea" style={{ left: `${leftPosition}px`, bottom: `${bottomPosition}` }}>
-                    {console.log(leftPosition, 'up')}
-                </div>
+
             </div>
-        </div >
+            <div className="bombGrabArea" style={{ left: `${leftPosition}px`, bottom: `${bottomPosition}px` }}>
+            </div>
+        </div>
     );
 };
 

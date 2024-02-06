@@ -3,7 +3,8 @@ import { drawGorillaBody, drawGorillaFace, drawGorillaLeftArm, drawGorillaRightA
 export const useDrawings = (ctx) => {
     const drawBackground = (ctx, phase) => {
         ctx.fillStyle = "#58A8D8";
-        ctx.fillRect(0, 0, window.innerWidth / phase.scale, window.innerHeight / phase.scale);
+        // ctx.fillRect(0, 0, window.innerWidth / phase.scale, window.innerHeight / phase.scale);
+        ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
 
 
     };
@@ -53,6 +54,7 @@ export const useDrawings = (ctx) => {
     }
     const calculateScale = (phase) => {
         const lastBuilding = phase.buildings.at(-1);
+
         const totalWidthOfTheCity = lastBuilding.x + lastBuilding.width;
 
         phase.scale = window.innerWidth / totalWidthOfTheCity;
